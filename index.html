@@ -63,6 +63,7 @@
       width: var(--envelope-width);
       perspective: 1000px;
       cursor: pointer;
+      user-select: none;
     }
 
     /* Hover para desktop */
@@ -280,7 +281,7 @@
       envelope.setAttribute('aria-pressed', pressed);
     });
 
-    // Opcional: para que también funcione con teclado (Enter o Space)
+    // Para que funcione con teclado (Enter o Space)
     envelope.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
