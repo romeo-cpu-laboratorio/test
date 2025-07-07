@@ -4,13 +4,10 @@
   <meta charset="UTF-8" />
   <title>Para Nao</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="google-adsense-account" content="ca-pub-4704501585981299" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Kaushan+Script&display=swap');
 
-    *,
-    ::before,
-    ::after {
+    * {
       box-sizing: border-box;
     }
 
@@ -25,7 +22,6 @@
       margin: 0;
       padding: 1rem;
       overflow-x: hidden;
-      -webkit-tap-highlight-color: transparent;
       cursor: default;
     }
 
@@ -55,29 +51,37 @@
       --fold-delay: calc(var(--duration) / 2);
       --fold-delay-hover: calc(var(--duration) * 0.75);
       --front-font-size: 1rem;
-      --snowman-width: 50px;
-      --bells-width: 30px;
 
       position: relative;
       height: var(--envelope-height);
       width: var(--envelope-width);
       perspective: 1000px;
       cursor: pointer;
-      user-select: none;
     }
 
-    /* Hover para desktop */
-    .envelope:hover {
-      --envelope-transform: var(--envelope-transform-hover);
-      --shadow-transform: rotateY(180deg);
-      --fold-rotate: var(--fold-rotate-hover);
-      --fold-delay: var(--fold-delay-hover);
-      --fold-zindex: var(--fold-zindex-hover);
-      --letter-height: var(--letter-height-hover);
-      --letter-delay: var(--letter-delay-hover);
+    /* Hover en desktop: abrir sobre */
+    @media (hover: hover) and (pointer: fine) {
+      .envelope:hover {
+        --envelope-transform: var(--envelope-transform-hover);
+        --shadow-transform: rotateY(180deg);
+        --fold-rotate: var(--fold-rotate-hover);
+        --fold-delay: var(--fold-delay-hover);
+        --fold-zindex: var(--fold-zindex-hover);
+        --letter-height: var(--letter-height-hover);
+        --letter-delay: var(--letter-delay-hover);
+      }
+
+      /* Quitar toggle en hover para no conflicto */
+      .envelope.flipped {
+        --envelope-transform: var(--envelope-transform);
+        --shadow-transform: none;
+        --fold-rotate: rotateX(0deg);
+        --letter-height: calc(var(--envelope-height) - 2rem);
+        --letter-delay: 0ms;
+      }
     }
 
-    /* Clase para activar flip en click/tap */
+    /* En móvil, abrir/ cerrar con toggle clase flipped */
     .envelope.flipped {
       --envelope-transform: var(--envelope-transform-hover);
       --shadow-transform: rotateY(180deg);
@@ -88,15 +92,7 @@
       --letter-delay: var(--letter-delay-hover);
     }
 
-    @media (min-width: 720px) {
-      .envelope {
-        --letter-font-size: 1.2rem;
-        --snowman-width: 100px;
-        --bells-width: 60px;
-        --front-font-size: 1.25rem;
-      }
-    }
-
+    /* Resto del CSS igual... */
     .envelope::after {
       content: "";
       position: absolute;
@@ -216,7 +212,6 @@
       color: var(--letter-clr-text);
     }
 
-    .custom-image,
     .custom-image2 {
       width: 60%;
       max-width: 150px;
@@ -257,7 +252,8 @@
         <div class="top-fold"></div>
         <div class="letter">
           <p style="font-size: 2.5rem;">✨</p>
-          <p>Algunas mañanas nacen tranquilas, otras con prisa. Pero hay una constante que vuelve cualquier día más amable:
+          <p>
+            Algunas mañanas nacen tranquilas, otras con prisa. Pero hay una constante que vuelve cualquier día más amable:
             <span class="highlight">pensar en ti apenas despierto.</span>
           </p>
           <img
@@ -270,18 +266,15 @@
     </div>
   </div>
 
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4704501585981299" crossorigin="anonymous"></script>
-
   <script>
     const envelope = document.querySelector('.envelope');
+
     envelope.addEventListener('click', () => {
       envelope.classList.toggle('flipped');
-      // Actualiza aria-pressed para accesibilidad
       const pressed = envelope.classList.contains('flipped');
       envelope.setAttribute('aria-pressed', pressed);
     });
 
-    // Para que funcione con teclado (Enter o Space)
     envelope.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -291,7 +284,7 @@
       }
     });
 
-    // Bloquear menú contextual y algunas teclas de inspección
+    // Bloquear menú contextual y teclas para inspección
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', e => {
       if (e.key === 'F12' || (e.ctrlKey && (e.key === 'u' || (e.shiftKey && e.key === 'I')))) {
